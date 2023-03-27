@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializer import PatientSerializer, DoctorSerializer
+from .serializer import PatientSerializer, DoctorSerializer, AppointmentSerializer
 from django.http.response import JsonResponse
 from rest_framework.response import Response
-from .models import Patient, Doctor
+from .models import Patient, Doctor, Appointment
 
 
 # Create your views here.
@@ -37,6 +37,17 @@ class PatientView(APIView):
             return Response(serializer.data)
 
 
+class AppointmentView(APIView):
+    def get_app_doc(self, fk=None):
+        data = Appointment.objects.get(doctor_id=fk)
+        serializer = AppointmentSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def get_app_patient(self, fk=None):
+        data = Appointment.objects.get(patient_id=fk)
+        serializer = AppointmentSerializer(data, many=True)
+        return Response(serializer.data)
+
 
 class DoctorView(APIView):
 
@@ -51,7 +62,7 @@ class DoctorView(APIView):
 
     def get_doctor(self, pk):
         try:
-            doctor = Doctor.objects.get(patientId=pk)
+            doctor = Doctor.objects.get(doctorId=pk)
             serializer = DoctorSerializer(doctor, many=False)
             return Response(serializer.data)
         except Patient.DoesNotExist():
@@ -63,5 +74,7 @@ class DoctorView(APIView):
             return data
         else:
             data = Doctor.objects.all()
-            serializer = DoctorView(data, many=True)
+            serializer = DoctorSerializer(data, many=True)
             return Response(serializer.data)
+
+    # def get_appointment
