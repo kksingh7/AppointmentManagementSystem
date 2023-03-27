@@ -37,16 +37,31 @@ class PatientView(APIView):
             return Response(serializer.data)
 
 
-class AppointmentView(APIView):
-    def get_app_doc(self, fk=None):
-        data = Appointment.objects.get(doctor_id=fk)
+class AppointmentViewDoctor(APIView):
+    def get(self, request, fk=None):
+        data = Appointment.objects.filter(doctor_id=fk)
         serializer = AppointmentSerializer(data, many=True)
         return Response(serializer.data)
 
-    def get_app_patient(self, fk=None):
-        data = Appointment.objects.get(patient_id=fk)
+
+class AppointmentViewPatient(APIView):
+
+    def get(self, request, fk=None):
+        data = Appointment.objects.filter(patient_id=fk)
         serializer = AppointmentSerializer(data, many=True)
         return Response(serializer.data)
+
+
+class AppointmentView(APIView):
+
+    def post(self, request):
+        data = request.data
+        serializer = AppointmentSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(200)
+        return Response(serializer.errors)
 
 
 class DoctorView(APIView):
