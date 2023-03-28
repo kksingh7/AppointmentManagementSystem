@@ -36,6 +36,10 @@ class PatientView(APIView):
             serializer = PatientSerializer(data, many=True)
             return Response(serializer.data)
 
+    def delete(self, request, pk=None):
+        patient = Patient.objects.get(patientId=pk)
+        patient.delete()
+        return Response(200)
 
 class AppointmentViewDoctor(APIView):
     def get(self, request, fk=None):
@@ -62,6 +66,12 @@ class AppointmentView(APIView):
             serializer.save()
             return Response(200)
         return Response(serializer.errors)
+
+
+    def delete(self, request, pk=None):
+        appointment = Appointment.get(id=pk)
+        appointment.delete()
+        return Response(200)
 
 
 class DoctorView(APIView):
@@ -92,4 +102,7 @@ class DoctorView(APIView):
             serializer = DoctorSerializer(data, many=True)
             return Response(serializer.data)
 
-    # def get_appointment
+    def delete(self, request, pk=None):
+        doctor = Doctor.objects.get(doctorId=pk)
+        doctor.delete()
+        return Response(200)

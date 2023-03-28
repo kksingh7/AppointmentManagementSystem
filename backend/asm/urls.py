@@ -9,7 +9,8 @@ urlpatterns = [
     path('doctor/', DoctorView.as_view()),
     path("doctor/<int:pk>/", DoctorView.as_view()),
     path("doctor/<int:fk>/appointment/", AppointmentViewDoctor.as_view()),
-    path('appointment/', AppointmentView.as_view())
+    path('appointment/', AppointmentView.as_view()),
+    path('appointment/<int:pk>', AppointmentView.as_view())
     # path()
 ]
 
